@@ -1,6 +1,6 @@
 ## Detector Setting
-from detector import DetectorModule
-import detector as de
+from models.detector import DetectorModule
+import models.detector as de
 
 
 detectors = []

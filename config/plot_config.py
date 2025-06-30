@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from detector_config import detectors
+from config.detector_config import detectors
 
 
 plt.style.use("seaborn-whitegrid")
