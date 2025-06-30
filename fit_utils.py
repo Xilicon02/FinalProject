@@ -1,6 +1,5 @@
 # Including two kinds of fitting method
 # Which one is better?
-
 import numpy as np
 
 def On_xyPlane(centroid, direction):
@@ -31,6 +30,8 @@ def PCA_Fit(data):
 
     _, _, vh = np.linalg.svd(centered)
     direction = vh[0]
+    if direction[2] < 0:
+        direction *= -1
 
     init_point = On_xyPlane(centroid, direction)
 

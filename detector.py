@@ -1,7 +1,8 @@
+### Definition of Detector
 import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-### Definition of Detector
+
 class DetectorModule:
 
     def __init__(self, size, position):
@@ -65,7 +66,7 @@ class DetectorModule:
             t = (z - particle.position[2]) / particle.direction[2]
             inter_point = particle.position + particle.direction * t
             x_int, y_int = inter_point[0], inter_point[1]
-            ax.scatter(x_int, y_int, z, color='black', s=25, zorder=99)
+            ax.scatter(x_int, y_int, z, color='b', s=25)
 
 
     # Draw the detector module
@@ -80,7 +81,7 @@ class DetectorModule:
             (x_min, y_max, z),
         ]
 
-        alpha = 0.5 if self.was_hit else 0.2
+        alpha = 0.7 if self.was_hit else 0.2
         # edgecolor='none' for no line in the edge
         square = Poly3DCollection([verts], color=color, alpha=alpha)
         #square = Poly3DCollection([verts], color=color, alpha=alpha, edgecolor='none')

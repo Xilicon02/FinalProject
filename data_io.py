@@ -1,5 +1,4 @@
 # Saving data as csv
-
 import csv
 
 def save_detected_data(detectors, particle, filename='data/detectors.csv'):
