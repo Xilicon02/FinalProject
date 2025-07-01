@@ -99,7 +99,7 @@ class DetectorModule:
 ########################### May have bug or can update
 # x, y need to be n*size when setting, the center of detector module
 # the midule one for each z is (x=0, y=0)
-def Set_Detector_Module(x_range, y_range, z, size):
+def Set_Detector_Module(size, x_range, y_range, z):
     detectors = []
     X, Y = np.meshgrid(np.arange(-x_range, x_range+1, size), np.arange(-y_range, y_range+1, size))
     for x, y in zip(X.flatten(), Y.flatten()):

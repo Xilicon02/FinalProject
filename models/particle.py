@@ -1,5 +1,6 @@
 ### Definition of Particle
 import numpy as np
+import random
 
 class Particle:
     def __init__(self, direction=None, position=None):
@@ -33,8 +34,13 @@ class Particle:
 class LLParticle(Particle):
     """Decay in to two particles after a certain time"""
 
-    def __init__(self, direction=None, position=None, decay_time=50, daughters=2):
+    def __init__(self, direction=None, position=None, decay_time=None, daughters=2):
         super().__init__(direction, position)
+
+        # if no set decay time, set a random decay time (10-20?)
+        if decay_time is None:
+            decay_time = random.randint(10,20)
+
         self.decay_time = decay_time
         self.daughters = daughters
 
