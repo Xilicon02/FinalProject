@@ -9,7 +9,7 @@ detectors = []
 
 # ===== D1 ======
 
-#detectors.append(de.DetectorModule(25, (0, 0, 0)))
+detectors.append(de.DetectorModule(25, (0, 0, 0)))
 detectors += de.Set_Detector_Module(25, 50, 50, 5)      # Layer 1, z=5
 detectors += de.Set_Detector_Module(25, 100, 100, 10)   # Layer 2, z=10
 detectors += de.Set_Detector_Module(50, 150, 150, 15)   # Layer 3, z=15
