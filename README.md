@@ -14,7 +14,10 @@ This repository contains the code for the final project of numerical analysis co
 
 ## 📝 Memo
 
-- `PCA_Linear` is about comparing PCA and Least Squares Fitting Method
+- `PCA_Linear` is about comparing PCA and Least Squases Fitting Method
+
   (Now Using Least Squares Fitting)
-  (May have bug in PCA?)
+
+  (May have bug in PCA? Sometime very large, detector reason?) 
+
 - `Example` include the way of using some classes and function.
