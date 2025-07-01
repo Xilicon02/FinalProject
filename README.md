@@ -1,6 +1,6 @@
 # FinalProject
 
-This repository contains the code for the final project of numerical analysis course.
+This repository contains the code for the final project of numerical analysis course. Simulating a simple detector.
 
 
 ## 📁 Structure

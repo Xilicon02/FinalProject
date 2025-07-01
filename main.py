@@ -70,6 +70,8 @@ def main(particle, detectors, filename):
     'dir_x': [particle.direction[0]],
     'dir_y': [particle.direction[1]],
     'dir_z': [particle.direction[2]],
+    'init_x': [particle.position[0]],
+    'init_y': [particle.position[1]],
     'hit_count': [hit_count],
     'PCA_dir_x': [direction1[0]],
     'PCA_dir_y': [direction1[1]],

@@ -128,3 +128,5 @@ def Get_Price(detectors):
         print("Price exceeds budget of 7200: {}".format(price))
     else:
         print("Total price is within budget: {}".format(price))
+    
+    return price
