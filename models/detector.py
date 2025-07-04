@@ -66,7 +66,7 @@ class DetectorModule:
                 x, y, z = particle.position_t(t)
                 #if t not in self.hit_times:
                 #    self.hit_times.append(t)
-                self.hit_time = t
+                self.hit_time = t + particle.init_time
                 return True
             else:
                 return False
