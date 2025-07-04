@@ -40,7 +40,7 @@ def main(particle, detectors, filename):
     Final_Point = particle.position_t(200)
     # set high zorder value to make the track line drawn on top of all Detector Module
     #ax.plot([P1.position[0], Final_Point[0]], [P1.position[1],Final_Point[1]],[P1.position[2],Final_Point[2]], color="black", zorder=999)
-    data_io.save_detected_data(detectors, particle)
+    data_io.save_detected_data(detectors=detectors, particles=particle)
     data_io.save_truth_data(detectors, particle)
 
     plt.close()
@@ -117,6 +117,9 @@ def main(particle, detectors, filename):
         df.to_csv(filename, mode='a', header=False, index=False)
     else:
         df.to_csv(filename, index=False)
+
+    for d in detectors:
+        d.clear()
 
 
 

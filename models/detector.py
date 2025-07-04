@@ -1,7 +1,9 @@
 ### Definition of Detector
+import os
+import sys
 import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-
+from models.particle import LLParticle
 
 class DetectorModule:
 
@@ -15,6 +17,7 @@ class DetectorModule:
         self.size = size
         self.position = position
         self.was_hit = False
+        self.hit_time = 0
 
         # set price
         if size == 100:
@@ -45,18 +48,34 @@ class DetectorModule:
         if dir[2] == 0:
             raise ValueError("track parallel to the x-y, no intersection")
 
-        t = (z-pos0[2])/dir[2]
-        inter_point = pos0 + dir * t
-        x_int, y_int = inter_point[0], inter_point[1]
+        if z >= pos0[2]:
+            t = (z-pos0[2])/dir[2]
+            inter_point = pos0 + dir * t
+            x_int, y_int = inter_point[0], inter_point[1]
         
-        # on x_min, y_min or larger, x_max and y_max not included
-        if (x_min <= x_int < x_max) and (y_min <= y_int < y_max):
-            self.was_hit = True
-            #print(t)
-            x, y, z = particle.position_t(t)
-            return True
-        else:
-            return False
+            # decay case
+            if isinstance(particle, LLParticle):
+                z_end = particle.end()[2]
+                if z_end < z:
+                    return False
+
+            # on x_min, y_min or larger, x_max and y_max not included
+            if (x_min <= x_int < x_max) and (y_min <= y_int < y_max):
+                self.was_hit = True
+                #print(t)
+                x, y, z = particle.position_t(t)
+                #if t not in self.hit_times:
+                #    self.hit_times.append(t)
+                self.hit_time = t
+                return True
+            else:
+                return False
+
+
+    def clear(self):
+        """Reset the hit status and time"""
+        self.was_hit = False
+        self.hit_time = 0
 
 
     # Draw the interaction point
@@ -88,9 +107,13 @@ class DetectorModule:
         ax.add_collection3d(square)
 
 
-    def __str__(self):
+    def __repr__(self):
         return f"DetectorModule(size={self.size}cm, position={self.position}, price={self.price}万)"
         # 1万 = 10 thousand
+
+    
+    def __str__(self):
+        return self.__repr__()
 
 
 

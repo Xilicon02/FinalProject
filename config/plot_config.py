@@ -21,11 +21,11 @@ plt.rcParams.update({
 def configure_plot(ax):
     ax.set_xlim(-500, 500)
     ax.set_ylim(-500, 500)
-    ax.set_zlim(0, 50)
+    ax.set_zlim(0, 100)
     ax.set_xlabel('X (cm)')
     ax.set_ylabel('Y (cm)')
     ax.set_zlabel('Z (cm)')
-    ax.view_init(elev=20, azim=30) 
+    ax.view_init(elev=20, azim=-30) 
     #ax.view_init(elev=10, azim=0)
 
 

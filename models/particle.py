@@ -3,10 +3,11 @@ import numpy as np
 import random
 
 class Particle:
-    def __init__(self, direction=None, position=None):
+    def __init__(self, direction=None, position=None, init_time=0):
         if position is None:
             position = np.array((0,0,0), dtype=float)
         self.position = np.array(position, dtype=float)
+        self.init_time = init_time
 
         if direction is None:
             direction = self.generate_direction()
@@ -20,13 +21,13 @@ class Particle:
         return vec
 
     def position_t(self, t):
-        return self.position + t * self.direction
+        return self.position + (t-self.init_time) * self.direction
     
     def __repr__(self):
         return f"Particle(position={self.position}, direction={self.direction})"
 
     def __str__(self):
-        return f"Particle(position={self.position}, direction={self.direction})"
+        return self.__repr__()   
 
 
 
@@ -39,13 +40,21 @@ class LLParticle(Particle):
 
         # if no set decay time, set a random decay time (10-20?)
         if decay_time is None:
-            decay_time = random.randint(10,20)
+            decay_time = random.randint(20,30)
 
         self.decay_time = decay_time
         self.daughters = daughters
 
+        self._decayed = False
+        self.d1 = None
+        self.d2 = None
+        self.decay_point = None
+
     def decay(self):
-        decay_point = self.position_t(self.decay_time)
+        if self._decayed:
+            return Particle(self.d1, self.decay_point, self.decay_time), Particle(self.d2, self.decay_point, self.decay_time)
+
+        self.decay_point = self.position_t(self.decay_time)
 
         """ Direction of two decay products"""
         rand_dir = np.random.normal(0, 1, 3)
@@ -59,10 +68,26 @@ class LLParticle(Particle):
         d1 /= np.linalg.norm(d1)
         d2 /= np.linalg.norm(d2)
 
-        return Particle(d1, decay_point), Particle(d2, decay_point)
+        self.d1 = d1
+        self.d2 = d2
+        self._decayed = True
+
+        return Particle(d1, self.decay_point, self.decay_time), Particle(d2, self.decay_point, self.decay_time)
+
+
+    def end(self):
+        x, y, z = self.position_t(self.decay_time)
+        return np.array((x, y, z), dtype=float)
+
 
     def __repr__(self):
-        return f"Particle(position={self.position}, direction={self.direction}), Decay time={self.decay_time}, Decay at={self.position_t(self.decay_time)}"
+        if not self._decayed:
+            self.decay()
+        return (f"Particle(position={self.position}, direction={self.direction})\n"
+                f"Decay time={self.decay_time}, Decay at={self.decay_point}\n"
+                f"Decay Product1 direction={self.d1}\n"
+                f"Decay Product2 direction={self.d2}")
+
 
     def __str__(self):
-        return f"Particle(position={self.position}, direction={self.direction}), Decay time={self.decay_time}, Decay at={self.position_t(self.decay_time)}\n Decay Product1 direction={self.decay()[0].direction}, Decay Product2 direction={self.decay()[1].direction}"
+        return self.__repr__()
