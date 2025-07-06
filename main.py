@@ -12,7 +12,7 @@ import utils.fit_utils as fit_utils
 import utils.data_io as data_io
 import utils.evaluation as evaluation
 from config.plot_config import *
-import draw_detector
+import utils.draw_detector as draw_detector
 
 
 def main(particle, detectors, filename):
