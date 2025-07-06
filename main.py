@@ -121,8 +121,8 @@ def main(particle, detectors, filename):
     else:
         df.to_csv(filename, index=False)
 
-    #for d in detectors:
-    #    d.clear()
+    for d in detectors:
+        d.clear()
 
 
 

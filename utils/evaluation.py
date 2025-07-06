@@ -26,13 +26,24 @@ def angular_deviation(truth_direction, fit_direction):
     """ Input:  Truth direction and Fit Direction"""
     """ This way only considered track angular, not included initial points """
 
-    v1 = fit_direction / np.linalg.norm(fit_direction)
-    v2 = truth_direction / np.linalg.norm(truth_direction)
+    norm_fit = np.linalg.norm(fit_direction)
+    norm_truth = np.linalg.norm(truth_direction)
+    
+    if norm_fit == 0 or norm_truth == 0 or np.isnan(norm_fit) or np.isnan(norm_truth):
+        print("Invalid direction vector (zero norm or nan), skipping angular deviation calculation.")
+        return None
+
+    v1 = fit_direction / norm_fit
+    v2 = truth_direction / norm_truth
     cos_theta = np.clip(np.dot(v1, v2), -1.0, 1.0)
 
-    print(f"Angular Deviation: {np.arccos(cos_theta)}")
-
-    return np.arccos(cos_theta)
+    angle = np.arccos(cos_theta)
+    if np.isnan(angle):
+        print("Not valid fitting! Angle is NaN.")
+        return None
+    
+    print(f"Angular Deviation: {angle}")
+    return angle
 
 
 

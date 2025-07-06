@@ -1,4 +1,4 @@
-### Definition of Detector
+## Definition of Detector
 import os
 import sys
 import numpy as np
