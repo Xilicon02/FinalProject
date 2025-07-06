@@ -1,3 +1,11 @@
+"""
+This Python script performs data fitting using both PCA and the Least Squares Method,
+aiming to identify the more suitable approach.
+
+The output is analysed by PCA_Linear.ipynb
+"""
+
+
 import numpy as np
 import pandas as pd
 import csv
@@ -132,6 +140,6 @@ remove_files_in_folder('PCA_Linear')
 remove_files_in_folder('PCA_Linear/plot')
 
 
-for i in range(0,100):
+for i in range(0,50):
     P1 = Particle()
     main(P1, detectors, 'PCA_Linear/particle_info.csv')

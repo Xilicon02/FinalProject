@@ -1,4 +1,3 @@
-# Including two kinds of fitting method
 # Which one is better?
 import numpy as np
 

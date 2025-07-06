@@ -49,8 +49,8 @@ class DetectorModule:
             raise ValueError("track parallel to the x-y, no intersection")
 
         if z >= pos0[2]:
-            t = (z-pos0[2])/dir[2]
-            inter_point = pos0 + dir * t
+            t = (z - pos0[2]) / (dir[2] * particle.speed)
+            inter_point = particle.position_t(t)
             x_int, y_int = inter_point[0], inter_point[1]
         
             # decay case
@@ -72,18 +72,12 @@ class DetectorModule:
                 return False
 
 
-    def clear(self):
-        """Reset the hit status and time"""
-        self.was_hit = False
-        self.hit_time = 0
-
-
     # Draw the interaction point
     def interaction_point(self, ax, particle):
         if self.is_hit(particle):
             z = self.bounds()[2]
-            t = (z - particle.position[2]) / particle.direction[2]
-            inter_point = particle.position + particle.direction * t
+            t = (z - particle.position[2]) / (particle.direction[2]*particle.speed)
+            inter_point = particle.position_t(t)
             x_int, y_int = inter_point[0], inter_point[1]
             ax.scatter(x_int, y_int, z, color='b', s=25)
 
@@ -105,6 +99,12 @@ class DetectorModule:
         square = Poly3DCollection([verts], color=color, alpha=alpha)
         #square = Poly3DCollection([verts], color=color, alpha=alpha, edgecolor='none')
         ax.add_collection3d(square)
+
+
+    def clear(self):
+        """Reset the hit status and time"""
+        self.was_hit = False
+        self.hit_time = 0
 
 
     def __repr__(self):

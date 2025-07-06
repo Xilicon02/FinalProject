@@ -40,33 +40,35 @@ def main(particle, detectors, filename):
     Final_Point = particle.position_t(200)
     # set high zorder value to make the track line drawn on top of all Detector Module
     #ax.plot([P1.position[0], Final_Point[0]], [P1.position[1],Final_Point[1]],[P1.position[2],Final_Point[2]], color="black", zorder=999)
-    data_io.save_detected_data(detectors=detectors, particles=particle)
+    data_io.save_detected_data(detectors, particle)
     data_io.save_truth_data(detectors, particle)
 
     plt.close()
 
-    detector_data = pd.read_csv('data/detectors.csv')
+
+    recorded_data = pd.read_csv('data/detectors.csv')
     truth_data = pd.read_csv('data/particle.csv')
-    points = detector_data[['x', 'y', 'z']].values
-    track = truth_data[['x', 'y', 'z']].values
-    px, py, pz = points.T
-    tx, ty, tz = track.T
+    recorded = recorded_data[['x', 'y', 'z']].values
+    truth = truth_data[['x', 'y', 'z']].values
+    rx, ry, rz = recorded.T
+    tx, ty, tz = truth.T
 
-
-    t_vals = np.linspace(0, 200, 200)
 
     # =====Linear Fit=====
-    initial, direction, init_point = fit_utils.Linear_Fit(points)
-    line_points = init_point + t_vals[:, np.newaxis] * direction
+    initial, direction, init_point = fit_utils.Linear_Fit(recorded)
 
     ang = evaluation.angular_deviation(particle.direction, direction)
-    RMSE = evaluation.compute_rmse(track, evaluation.get_points(detectors, initial, direction))
+    RMSE = evaluation.compute_rmse(truth, evaluation.get_points(detectors, initial, direction))
 
 
     # =====Plotting=====
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection='3d')
     configure_plot(ax)
+
+    zs = [truth[:,2].min(), truth[:,2].max()]
+    ys = init_point[1] + (zs - init_point[2]) * direction[1] / direction[2]
+    xs = init_point[0] + (zs - init_point[2]) * direction[0] / direction[2]
 
     for d in detectors:
         z = d.position[2]
@@ -83,11 +85,12 @@ def main(particle, detectors, filename):
         d.plot(ax, color=color)
         d.interaction_point(ax, P1)
 
-    ax.scatter(px, py, pz, c='r', s=10, label='Detector Hit', marker='o', alpha=0.3)
-    ax.scatter(tx, ty, tz, c='b', s=10, label='Truth Hit', marker='o', alpha=0.3)
-    ax.plot(tx, ty, tz, c='b', label='Truth Track', alpha=0.3, zorder=500)
-    ax.plot(line_points[:, 0], line_points[:, 1], line_points[:, 2], c='g', label='Least Fitted Track', alpha=0.3, zorder=499)
-    ax.scatter(init_point[0], init_point[1], init_point[2], c='g', s=10)
+
+    ax.scatter(rx, ry, rz, c='r', s=30, label='Recorded Hit', marker='o', alpha=0.5)
+    ax.scatter(tx, ty, tz, c='b', s=30, label='Truth Hit', marker='o', alpha=0.5)
+    ax.scatter(init_point[0], init_point[1], init_point[2], c='r')
+    ax.plot(tx, ty, tz, c='b', label='Truth Track', alpha=0.3)
+    ax.plot(xs, ys, zs, c='r', label='Fitted Track', alpha=0.5)
 
     ax.legend()
 
@@ -118,8 +121,8 @@ def main(particle, detectors, filename):
     else:
         df.to_csv(filename, index=False)
 
-    for d in detectors:
-        d.clear()
+    #for d in detectors:
+    #    d.clear()
 
 
 
@@ -131,7 +134,8 @@ if os.path.exists(folder_path):
             os.remove(file_path)
 
 
-for i in range(0,10):
+## Generate several particles and calculate mean rms
+for i in range(0,100):
     P1 = Particle()
     main(P1, detectors, 'Save1/particle_info.csv')
 
