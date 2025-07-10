@@ -48,8 +48,9 @@ class DetectorModule:
         if dir[2] == 0:
             raise ValueError("track parallel to the x-y, no intersection")
 
-        if z >= pos0[2]:
-            t = (z - pos0[2]) / (dir[2] * particle.speed)
+        #if z >= pos0[2]:
+        t = (z - pos0[2]) / (dir[2] * particle.speed)
+        if t >= 0:
             inter_point = particle.position_t(t)
             x_int, y_int = inter_point[0], inter_point[1]
         
@@ -77,9 +78,10 @@ class DetectorModule:
         if self.is_hit(particle):
             z = self.bounds()[2]
             t = (z - particle.position[2]) / (particle.direction[2]*particle.speed)
-            inter_point = particle.position_t(t)
-            x_int, y_int = inter_point[0], inter_point[1]
-            ax.scatter(x_int, y_int, z, color='b', s=25)
+            if t >= 0:
+                inter_point = particle.position_t(t)
+                x_int, y_int = inter_point[0], inter_point[1]
+                ax.scatter(x_int, y_int, z, color='b', s=25)
 
 
     # Draw the detector module

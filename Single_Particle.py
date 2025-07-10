@@ -12,10 +12,10 @@ import utils.fit_utils as fit_utils
 import utils.data_io as data_io
 import utils.evaluation as evaluation
 from config.plot_config import *
-import utils.draw_detector as draw_detector
+import utils.draw_detector
 
 
-def main(particle, detectors, filename):
+def single_case(particle, detectors, filename):
     hit_detectors = [d for d in detectors if d.is_hit(particle)]
     hit_count = len(hit_detectors)
 
@@ -26,6 +26,7 @@ def main(particle, detectors, filename):
     ax = fig.add_subplot(111, projection='3d')
     configure_plot(ax)
     for d in detectors:
+        d.clear()
         z = d.position[2]
         color = get_color_by_z(z)
         if d in hit_detectors:
@@ -121,31 +122,30 @@ def main(particle, detectors, filename):
     else:
         df.to_csv(filename, index=False)
 
-    for d in detectors:
-        d.clear()
 
 
 
-folder_path = 'Save1/'
-if os.path.exists(folder_path):
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        if os.path.isfile(file_path) and filename.endswith(('.png', '.csv')):
-            os.remove(file_path)
+if __name__ == "__main__":
+    folder_path = 'Save1/'
+    if os.path.exists(folder_path):
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            if os.path.isfile(file_path) and filename.endswith(('.png', '.csv')):
+                os.remove(file_path)
 
 
-## Generate several particles and calculate mean rms
-for i in range(0,100):
-    P1 = Particle()
-    main(P1, detectors, 'Save1/particle_info.csv')
+    ## Generate several particles and calculate mean rms
+    for i in range(0,100):
+        P1 = Particle()
+        single_case(P1, detectors, 'Save1/particle_info.csv')
 
-particle_info = pd.read_csv('Save1/particle_info.csv')
-RMSES = particle_info['Linear_RMSE'].values
+    particle_info = pd.read_csv('Save1/particle_info.csv')
+    RMSES = particle_info['Linear_RMSE'].values
 
-mean_rmse = np.mean(RMSES)
-median_rmse = np.median(RMSES)
-std_rmse = np.std(RMSES)
+    mean_rmse = np.mean(RMSES)
+    median_rmse = np.median(RMSES)
+    std_rmse = np.std(RMSES)
 
-print(f"Mean RMSE: {mean_rmse}")
-print(f"Median RMSE: {median_rmse}")
-print(f"Standard Deviation of RMSE: {std_rmse}")
+    print(f"Mean RMSE: {mean_rmse}")
+    print(f"Median RMSE: {median_rmse}")
+    print(f"Standard Deviation of RMSE: {std_rmse}")

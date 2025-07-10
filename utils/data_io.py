@@ -49,16 +49,25 @@ def save_truth_data(detectors, particles, filename='data/particle.csv'):
 
             z_layers = sorted(set(d.position[2] for d in detectors))
 
+            #for z in z_layers:
+            #    if pos0[2] > z:
+            #        continue
+            #    if isinstance(particles[i], LLParticle):
+            #        z_end = particles[i].end()[2]
+            #        if z_end < z:
+            #            continue
+            #    t = (z - pos0[2]) / dir[2]
+            #    point = pos0 + t * dir
+            #    writer.writerow([*point, i+1])
             for z in z_layers:
-                if pos0[2] > z:
-                    continue
                 if isinstance(particles[i], LLParticle):
                     z_end = particles[i].end()[2]
                     if z_end < z:
                         continue
-                t = (z - pos0[2]) / dir[2]
-                point = pos0 + t * dir
-                writer.writerow([*point, i+1])
+                t = (z-pos0[2]) / dir[2]
+                if t >= 0:
+                    point = pos0 + t * dir
+                    writer.writerow([*point, i+1])
 
 
         #pos0 = particles.position

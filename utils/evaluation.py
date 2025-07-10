@@ -9,13 +9,10 @@ def get_points(detectors, position, direction, begin_z=0, end_z=1000):
     C =[]
     z_layers = sorted(set(d.position[2] for d in detectors))
     for z in z_layers:
-        if begin_z > z:
-            continue
-        if end_z < z:
-            continue
         t = (z - position[2]) / direction[2]
-        point = position + direction * t
-        C.append(point)
+        if t >= 0:
+            point = position + direction * t
+            C.append(point)
 
     return np.array(C)
 

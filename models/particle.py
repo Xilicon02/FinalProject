@@ -37,7 +37,8 @@ class Particle:
         #return vec
 
     def position_t(self, t):
-        delta_t = t - self.init_time
+        #delta_t = t - self.init_time
+        delta_t = t
         return self.position + self.speed * delta_t * self.direction
     
     def __repr__(self):

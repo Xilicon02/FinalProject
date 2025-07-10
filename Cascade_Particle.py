@@ -36,7 +36,7 @@ def decay_case(particle, detectors, filename):
     configure_plot(ax)
 
     for d in detectors:
-        d.clear()
+        #d.clear()
         z = d.position[2]
         color = get_color_by_z(z)
         if d not in hit_detectors1 and d not in hit_detectors2 and d not in hit_detectors3:
@@ -100,6 +100,18 @@ def decay_case(particle, detectors, filename):
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection='3d')
     configure_plot(ax)
+
+    for d in detectors:
+        z = d.position[2]
+        color = get_color_by_z(z)
+        if d in hit_detectors1 or d in hit_detectors2 or d in hit_detectors3:
+            pass
+        else:
+            d.plot(ax, color=color)
+
+    plot_hit_detectors(ax, hit_detectors1, Mother)
+    plot_hit_detectors(ax, hit_detectors2, Product1)
+    plot_hit_detectors(ax, hit_detectors3, Product2)
 
     ax.scatter(tx, ty, tz, c='b', s=30, label='Truth Hit', marker='o', alpha=0.3)
     ax.scatter(rx, ry, rz, c='r', s=30, label='Recorded Hit', marker='o')
